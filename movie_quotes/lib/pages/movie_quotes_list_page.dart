@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:movie_quotes/components/movie_quote_row_component.dart';
+import 'package:movie_quotes/models/movie_quote.dart';
 
 class MovieQuotesListPage extends StatefulWidget {
   const MovieQuotesListPage({super.key});
@@ -10,6 +10,38 @@ class MovieQuotesListPage extends StatefulWidget {
 }
 
 class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
+  final quotes = <MovieQuote>[]; // Later we will remove this and use Firestore
+
+  @override
+  void initState() {
+    super.initState();
+    quotes.add(
+      MovieQuote(
+        quote: "I'll be back",
+        movie: "The Terminator",
+      ),
+    );
+    quotes.add(
+      MovieQuote(
+        quote: "Everything is Awesome",
+        movie: "The Lego Movie",
+      ),
+    );
+    quotes.add(
+      MovieQuote(
+        quote:
+            "Hello. My name is Inigo Montoya. You killed my father. Prepare to die.",
+        movie: "The Princess Bride",
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,8 +49,12 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
         title: const Text("Movie Quotes"),
       ),
       backgroundColor: Colors.grey[100],
-      body: Center(
-        child: Text("Hello"),
+      body: ListView(
+        children: [
+          MovieQuoteRow(quotes[0]),
+          MovieQuoteRow(quotes[1]),
+          MovieQuoteRow(quotes[2]),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
