@@ -10,16 +10,21 @@ class MovieQuoteRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: const Icon(Icons.movie_creation_outlined),
-      trailing: const Icon(Icons.chevron_right),
-      title: Text(
-        mq.quote,
-        overflow: TextOverflow.ellipsis,
-      ),
-      subtitle: Text(
-        mq.movie,
-        overflow: TextOverflow.ellipsis,
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 1.0),
+      child: Card(
+        child: ListTile(
+          leading: const Icon(Icons.movie_creation_outlined),
+          trailing: const Icon(Icons.chevron_right),
+          title: Text(
+            mq.quote,
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Text(
+            mq.movie,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ),
     );
   }
