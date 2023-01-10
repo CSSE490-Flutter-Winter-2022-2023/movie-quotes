@@ -21,12 +21,12 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
         movie: "The Terminator",
       ),
     );
-    quotes.add(
-      MovieQuote(
-        quote: "Everything is Awesome",
-        movie: "The Lego Movie",
-      ),
-    );
+    // quotes.add(
+    //   MovieQuote(
+    //     quote: "Everything is Awesome",
+    //     movie: "The Lego Movie",
+    //   ),
+    // );
     quotes.add(
       MovieQuote(
         quote:
@@ -44,17 +44,26 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
 
   @override
   Widget build(BuildContext context) {
+    // final List<MovieQuoteRow> movieRows = [];
+    // for (final movieQuote in quotes) {
+    //   movieRows.add(MovieQuoteRow(movieQuote));
+    // }
+
+    final List<MovieQuoteRow> movieRows =
+        quotes.map((mq) => MovieQuoteRow(mq)).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Movie Quotes"),
       ),
       backgroundColor: Colors.grey[100],
       body: ListView(
-        children: [
-          MovieQuoteRow(quotes[0]),
-          MovieQuoteRow(quotes[1]),
-          MovieQuoteRow(quotes[2]),
-        ],
+        // children: [
+        //   MovieQuoteRow(quotes[0]),
+        //   MovieQuoteRow(quotes[1]),
+        //   MovieQuoteRow(quotes[2]),
+        // ],
+        children: movieRows,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
