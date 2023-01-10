@@ -11,6 +11,8 @@ class MovieQuotesListPage extends StatefulWidget {
 
 class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
   final quotes = <MovieQuote>[]; // Later we will remove this and use Firestore
+  final quoteTextController = TextEditingController();
+  final movieTextController = TextEditingController();
 
   @override
   void initState() {
@@ -38,7 +40,8 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    quoteTextController.dispose();
+    movieTextController.dispose();
     super.dispose();
   }
 
@@ -67,11 +70,80 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print("You pressed the fab!");
+          showCreateQuoteDialog(context);
         },
         tooltip: 'Create',
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  Future<void> showCreateQuoteDialog(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Create a Movie Quote'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4.0),
+                child: TextFormField(
+                  controller: quoteTextController,
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Enter the quote',
+                  ),
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4.0),
+                child: TextFormField(
+                  controller: movieTextController,
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Enter the movie',
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Create'),
+              onPressed: () {
+                setState(() {
+                  quotes.add(
+                    MovieQuote(
+                      quote: quoteTextController.text,
+                      movie: movieTextController.text,
+                    ),
+                  );
+                  quoteTextController.text = "";
+                  movieTextController.text = "";
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
