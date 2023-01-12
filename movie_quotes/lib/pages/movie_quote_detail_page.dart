@@ -60,9 +60,9 @@ class LabelledTextDisplay extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-                fontSize: 20.0,
+                fontSize: 30.0,
                 fontWeight: FontWeight.w800,
-                fontFamily: "Rowdies"),
+                fontFamily: "Caveat"),
           ),
           Card(
             child: Container(

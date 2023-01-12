@@ -84,6 +84,13 @@ flutter:
         # - asset: assets/fonts/Rowdies/Rowdies-Light.ttf
         #   style: light
 
+    - family: Caveat
+      fonts:
+        - asset: assets/fonts/Caveat/static/Caveat-Regular.ttf
+        # - asset: assets/fonts/Rowdies/Rowdies-Bold.ttf
+        #   style: bold
+        # - asset: assets/fonts/Rowdies/Rowdies-Light.ttf
+        #   style: light
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
