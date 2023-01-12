@@ -15,6 +15,25 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Movie Quotes"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              print("You clicked Edit!");
+            },
+            icon: const Icon(Icons.edit),
+          ),
+          IconButton(
+            onPressed: () {
+              print("You clicked Delete!");
+              //  HW - make a SnackBar
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.delete),
+          ),
+          const SizedBox(
+            width: 40.0,
+          ),
+        ],
       ),
       backgroundColor: Colors.grey[100],
       body: Container(
