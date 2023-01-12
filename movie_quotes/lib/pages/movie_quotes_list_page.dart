@@ -64,7 +64,8 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return MovieQuoteDetailPage();
+                      return MovieQuoteDetailPage(
+                          mq); // In Firebase use a documentId
                     },
                   ),
                 );
