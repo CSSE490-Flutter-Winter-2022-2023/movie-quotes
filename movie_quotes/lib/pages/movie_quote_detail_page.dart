@@ -25,7 +25,17 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
           IconButton(
             onPressed: () {
               print("You clicked Delete!");
-              //  HW - make a SnackBar
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text('Quote Deleted'),
+                  action: SnackBarAction(
+                    label: 'Undo',
+                    onPressed: () {
+                      print("TODO: Figure out UNDO");
+                    },
+                  ),
+                ),
+              );
               Navigator.pop(context);
             },
             icon: const Icon(Icons.delete),
