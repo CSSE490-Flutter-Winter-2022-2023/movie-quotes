@@ -10,6 +10,16 @@ class MovieQuoteDetailPage extends StatefulWidget {
 }
 
 class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
+  final quoteTextController = TextEditingController();
+  final movieTextController = TextEditingController();
+
+  @override
+  void dispose() {
+    quoteTextController.dispose();
+    movieTextController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,6 +29,7 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
           IconButton(
             onPressed: () {
               print("You clicked Edit!");
+              showEditQuoteDialog(context);
             },
             icon: const Icon(Icons.edit),
           ),
@@ -63,6 +74,81 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> showEditQuoteDialog(BuildContext context) {
+    quoteTextController.text = widget.mq.quote;
+    movieTextController.text = widget.mq.movie;
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Edit this Movie Quote'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4.0),
+                child: TextFormField(
+                  controller: quoteTextController,
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Quote:',
+                  ),
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4.0),
+                child: TextFormField(
+                  controller: movieTextController,
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Movie:',
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Update'),
+              onPressed: () {
+                setState(() {
+                  widget.mq.quote = quoteTextController.text;
+                  widget.mq.movie = movieTextController.text;
+
+                  // quotes.add(
+                  //   MovieQuote(
+                  //     quote: quoteTextController.text,
+                  //     movie: movieTextController.text,
+                  //   ),
+                  // );
+                  quoteTextController.text = "";
+                  movieTextController.text = "";
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

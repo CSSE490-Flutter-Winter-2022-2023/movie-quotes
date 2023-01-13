@@ -56,11 +56,10 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
     final List<MovieQuoteRow> movieRows = quotes
         .map((mq) => MovieQuoteRow(
               movieQuote: mq,
-              onTap: () {
+              onTap: () async {
                 print(
                     "You clicked on the movie quote ${mq.quote} - ${mq.movie}");
-
-                Navigator.push(
+                await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) {
@@ -69,6 +68,7 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
                     },
                   ),
                 );
+                setState(() {});
               },
             ))
         .toList();
