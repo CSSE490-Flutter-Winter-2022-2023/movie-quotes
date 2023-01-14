@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "765835263695",
+    "project_id": "fisherds-movie-quotes-ios",
+    "storage_bucket": "fisherds-movie-quotes-ios.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:765835263695:android:0b4490621cfea042a681ba",
+        "android_client_info": {
+          "package_name": "edu.rose_hulman.fisherds.movie_quotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "765835263695-l9k8cgvharnc6di2k70csh88pm1840oc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLP-Ce007xPI46F7zO1WrEg4qdd93b2ok"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "765835263695-l9k8cgvharnc6di2k70csh88pm1840oc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "765835263695-g1e27585pls7t5uqemq1berccl92j17l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "edu.rosehulman.fisherds.MovieQuotes"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
