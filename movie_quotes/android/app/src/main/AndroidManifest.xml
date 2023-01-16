@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.rose_hulman.fisherds.movie_quotes">
+    package="edu.rosehulman.fisherds.moviequotes">
    <application
         android:label="movie_quotes"
         android:name="${applicationName}"
