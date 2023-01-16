@@ -29,6 +29,13 @@
             {
               "client_id": "241570666356-sadt5bam2mjnkbnjkdgk5km16b1qjlgp.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "241570666356-iicfqe3mi9r4a7fpoq099ih0id84paoq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "edu.rosehulman.fisherds.movieQuotes"
+              }
             }
           ]
         }
