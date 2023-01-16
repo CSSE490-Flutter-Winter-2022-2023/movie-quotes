@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "241570666356",
+    "project_id": "fisherds-movie-quotes-e657f",
+    "storage_bucket": "fisherds-movie-quotes-e657f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241570666356:android:c3b28fb39f99bcf52fbe21",
+        "android_client_info": {
+          "package_name": "edu.rosehulman.fisherds.moviequotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "241570666356-sadt5bam2mjnkbnjkdgk5km16b1qjlgp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz_jzVSUqj_ROkHokEqmEEFRQ4kL6XAZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "241570666356-sadt5bam2mjnkbnjkdgk5km16b1qjlgp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

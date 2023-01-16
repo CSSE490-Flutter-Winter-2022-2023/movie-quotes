@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>241570666356-iicfqe3mi9r4a7fpoq099ih0id84paoq.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.241570666356-iicfqe3mi9r4a7fpoq099ih0id84paoq</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAfkGVb-Baaue27wKsND25rMyFgmr6Gvdg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>241570666356</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>edu.rosehulman.fisherds.movieQuotes</string>
+	<key>PROJECT_ID</key>
+	<string>fisherds-movie-quotes-e657f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fisherds-movie-quotes-e657f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:241570666356:ios:7427182e79f501812fbe21</string>
+</dict>
+</plist>
