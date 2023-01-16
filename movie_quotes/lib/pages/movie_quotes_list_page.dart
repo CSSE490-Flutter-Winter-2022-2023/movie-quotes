@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:movie_quotes/components/movie_quote_row_component.dart';
+import 'package:movie_quotes/managers/movie_quotes_collection_manager.dart';
 import 'package:movie_quotes/models/movie_quote.dart';
 import 'package:movie_quotes/pages/movie_quote_detail_page.dart';
 
@@ -11,38 +14,47 @@ class MovieQuotesListPage extends StatefulWidget {
 }
 
 class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
-  final quotes = <MovieQuote>[]; // Later we will remove this and use Firestore
+  // final quotes = <MovieQuote>[]; // Later we will remove this and use Firestore
   final quoteTextController = TextEditingController();
   final movieTextController = TextEditingController();
+
+  StreamSubscription? movieQuoteSubscription;
 
   @override
   void initState() {
     super.initState();
-    quotes.add(
-      MovieQuote(
-        quote: "I'll be back",
-        movie: "The Terminator",
-      ),
-    );
+
+    movieQuoteSubscription =
+        MovieQuotesCollectionManager.instance.startListening(() {
+      setState(() {});
+    });
+
+    // quotes.add(
+    //   MovieQuote(
+    //     quote: "I'll be back",
+    //     movie: "The Terminator",
+    //   ),
+    // );
     // quotes.add(
     //   MovieQuote(
     //     quote: "Everything is Awesome",
     //     movie: "The Lego Movie",
     //   ),
     // );
-    quotes.add(
-      MovieQuote(
-        quote:
-            "Hello. My name is Inigo Montoya. You killed my father. Prepare to die.",
-        movie: "The Princess Bride",
-      ),
-    );
+    // quotes.add(
+    //   MovieQuote(
+    //     quote:
+    //         "Hello. My name is Inigo Montoya. You killed my father. Prepare to die.",
+    //     movie: "The Princess Bride",
+    //   ),
+    // );
   }
 
   @override
   void dispose() {
     quoteTextController.dispose();
     movieTextController.dispose();
+    MovieQuotesCollectionManager.instance.stopListening(movieQuoteSubscription);
     super.dispose();
   }
 
@@ -53,25 +65,26 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
     //   movieRows.add(MovieQuoteRow(movieQuote));
     // }
 
-    final List<MovieQuoteRow> movieRows = quotes
-        .map((mq) => MovieQuoteRow(
-              movieQuote: mq,
-              onTap: () async {
-                print(
-                    "You clicked on the movie quote ${mq.quote} - ${mq.movie}");
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return MovieQuoteDetailPage(
-                          mq); // In Firebase use a documentId
-                    },
-                  ),
-                );
-                setState(() {});
-              },
-            ))
-        .toList();
+    final List<MovieQuoteRow> movieRows =
+        MovieQuotesCollectionManager.instance.lastestMovieQuotes
+            .map((mq) => MovieQuoteRow(
+                  movieQuote: mq,
+                  onTap: () async {
+                    print(
+                        "You clicked on the movie quote ${mq.quote} - ${mq.movie}");
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return MovieQuoteDetailPage(
+                              mq); // In Firebase use a documentId
+                        },
+                      ),
+                    );
+                    setState(() {});
+                  },
+                ))
+            .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -147,12 +160,12 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
               child: const Text('Create'),
               onPressed: () {
                 setState(() {
-                  quotes.add(
-                    MovieQuote(
-                      quote: quoteTextController.text,
-                      movie: movieTextController.text,
-                    ),
-                  );
+                  // quotes.add(
+                  //   MovieQuote(
+                  //     quote: quoteTextController.text,
+                  //     movie: movieTextController.text,
+                  //   ),
+                  // );
                   quoteTextController.text = "";
                   movieTextController.text = "";
                 });

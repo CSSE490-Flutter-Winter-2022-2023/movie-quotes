@@ -31,10 +31,10 @@
               "client_type": 3
             },
             {
-              "client_id": "765835263695-g1e27585pls7t5uqemq1berccl92j17l.apps.googleusercontent.com",
+              "client_id": "765835263695-1ms8br35bu5sfh0a3ua30erh9lf962kp.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "edu.rosehulman.fisherds.MovieQuotes"
+                "bundle_id": "edu.rosehulman.fisherds.movieQuotes"
               }
             }
           ]
