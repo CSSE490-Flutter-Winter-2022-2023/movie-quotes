@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:movie_quotes/components/movie_quote_row_component.dart';
+import 'package:movie_quotes/managers/movie_quote_collection_manager.dart';
 import 'package:movie_quotes/models/movie_quote.dart';
 import 'package:movie_quotes/pages/movie_quote_detail_page.dart';
 
@@ -15,28 +18,37 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
   final quoteTextController = TextEditingController();
   final movieTextController = TextEditingController();
 
+  StreamSubscription? movieQuotesSubscription;
+
   @override
   void initState() {
     super.initState();
-    quotes.add(
-      MovieQuote(
-        quote: "I'll be back",
-        movie: "The Terminator",
-      ),
-    );
+
+    movieQuotesSubscription =
+        MovieQuotesCollectionManager.instance.startListening(() {
+      print("There are new quotes!!!!");
+      setState(() {});
+    });
+
+    // quotes.add(
+    //   MovieQuote(
+    //     quote: "I'll be back",
+    //     movie: "The Terminator",
+    //   ),
+    // );
     // quotes.add(
     //   MovieQuote(
     //     quote: "Everything is Awesome",
     //     movie: "The Lego Movie",
     //   ),
     // );
-    quotes.add(
-      MovieQuote(
-        quote:
-            "Hello. My name is Inigo Montoya. You killed my father. Prepare to die.",
-        movie: "The Princess Bride",
-      ),
-    );
+    // quotes.add(
+    //   MovieQuote(
+    //     quote:
+    //         "Hello. My name is Inigo Montoya. You killed my father. Prepare to die.",
+    //     movie: "The Princess Bride",
+    //   ),
+    // );
   }
 
   @override
@@ -147,12 +159,14 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
               child: const Text('Create'),
               onPressed: () {
                 setState(() {
-                  quotes.add(
-                    MovieQuote(
-                      quote: quoteTextController.text,
-                      movie: movieTextController.text,
-                    ),
-                  );
+                  // TODO: Add quotes with firebase!
+
+                  // quotes.add(
+                  //   MovieQuote(
+                  //     quote: quoteTextController.text,
+                  //     movie: movieTextController.text,
+                  //   ),
+                  // );
                   quoteTextController.text = "";
                   movieTextController.text = "";
                 });
