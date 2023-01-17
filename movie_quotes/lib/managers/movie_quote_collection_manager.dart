@@ -22,7 +22,7 @@ class MovieQuotesCollectionManager {
           querySnapshot.docs.map((doc) => MovieQuote.from(doc)).toList();
       observer();
 
-      print(querySnapshot.docs);
+      // print(querySnapshot.docs);
     });
   }
 

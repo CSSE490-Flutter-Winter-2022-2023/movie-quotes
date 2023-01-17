@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:movie_quotes/components/movie_quote_row_component.dart';
 import 'package:movie_quotes/managers/movie_quote_collection_manager.dart';
-import 'package:movie_quotes/models/movie_quote.dart';
 import 'package:movie_quotes/pages/movie_quote_detail_page.dart';
 
 class MovieQuotesListPage extends StatefulWidget {
@@ -14,7 +13,6 @@ class MovieQuotesListPage extends StatefulWidget {
 }
 
 class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
-  final quotes = <MovieQuote>[]; // Later we will remove this and use Firestore
   final quoteTextController = TextEditingController();
   final movieTextController = TextEditingController();
 
@@ -26,7 +24,7 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
 
     movieQuotesSubscription =
         MovieQuotesCollectionManager.instance.startListening(() {
-      print("There are new quotes!!!!");
+      // print("There are new quotes!!!!");
       setState(() {});
     });
 
@@ -53,6 +51,8 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
 
   @override
   void dispose() {
+    MovieQuotesCollectionManager.instance
+        .stopListening(movieQuotesSubscription);
     quoteTextController.dispose();
     movieTextController.dispose();
     super.dispose();
@@ -60,30 +60,26 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final List<MovieQuoteRow> movieRows = [];
-    // for (final movieQuote in quotes) {
-    //   movieRows.add(MovieQuoteRow(movieQuote));
-    // }
-
-    final List<MovieQuoteRow> movieRows = quotes
-        .map((mq) => MovieQuoteRow(
-              movieQuote: mq,
-              onTap: () async {
-                print(
-                    "You clicked on the movie quote ${mq.quote} - ${mq.movie}");
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return MovieQuoteDetailPage(
-                          mq); // In Firebase use a documentId
-                    },
-                  ),
-                );
-                setState(() {});
-              },
-            ))
-        .toList();
+    final List<MovieQuoteRow> movieRows =
+        MovieQuotesCollectionManager.instance.latestMovieQuotes
+            .map((mq) => MovieQuoteRow(
+                  movieQuote: mq,
+                  onTap: () async {
+                    print(
+                        "You clicked on the movie quote ${mq.quote} - ${mq.movie}");
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return MovieQuoteDetailPage(
+                              mq); // In Firebase use a documentId
+                        },
+                      ),
+                    );
+                    setState(() {});
+                  },
+                ))
+            .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -158,7 +154,7 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
               ),
               child: const Text('Create'),
               onPressed: () {
-                setState(() {
+                setState(() async {
                   // TODO: Add quotes with firebase!
 
                   // quotes.add(
@@ -167,10 +163,16 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
                   //     movie: movieTextController.text,
                   //   ),
                   // );
+                  final mqId = await MovieQuotesCollectionManager.instance.add(
+                    quote: quoteTextController.text,
+                    movie: movieTextController.text,
+                  );
+                  print(mqId);
+                  Navigator.of(context).pop();
+
                   quoteTextController.text = "";
                   movieTextController.text = "";
                 });
-                Navigator.of(context).pop();
               },
             ),
           ],
