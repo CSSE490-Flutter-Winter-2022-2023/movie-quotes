@@ -40,50 +40,54 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> actions = [];
+    if (MovieQuoteDocumentManager.instance.latestMovieQuote != null) {
+      actions = [
+        IconButton(
+          onPressed: () {
+            print("You clicked Edit!");
+            showEditQuoteDialog(context);
+          },
+          icon: const Icon(Icons.edit),
+        ),
+        IconButton(
+          onPressed: () {
+            final tempQuote =
+                MovieQuoteDocumentManager.instance.latestMovieQuote!.quote;
+            final tempMovie =
+                MovieQuoteDocumentManager.instance.latestMovieQuote!.movie;
+
+            MovieQuoteDocumentManager.instance.delete();
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: const Text('Quote Deleted'),
+                action: SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () {
+                    print("TODO: Figure out UNDO");
+                    MovieQuotesCollectionManager.instance.add(
+                      quote: tempQuote,
+                      movie: tempMovie,
+                    );
+                  },
+                ),
+              ),
+            );
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.delete),
+        ),
+        const SizedBox(
+          width: 40.0,
+        ),
+      ];
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Movie Quotes"),
-        actions: [
-          IconButton(
-            onPressed: () {
-              print("You clicked Edit!");
-              showEditQuoteDialog(context);
-            },
-            icon: const Icon(Icons.edit),
-          ),
-          IconButton(
-            onPressed: () {
-              // print("You clicked Delete!");
-              final tempQuote =
-                  MovieQuoteDocumentManager.instance.latestMovieQuote!.quote;
-              final tempMovie =
-                  MovieQuoteDocumentManager.instance.latestMovieQuote!.movie;
-
-              MovieQuoteDocumentManager.instance.delete();
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Text('Quote Deleted'),
-                  action: SnackBarAction(
-                    label: 'Undo',
-                    onPressed: () {
-                      print("TODO: Figure out UNDO");
-                      MovieQuotesCollectionManager.instance.add(
-                        quote: tempQuote,
-                        movie: tempMovie,
-                      );
-                    },
-                  ),
-                ),
-              );
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.delete),
-          ),
-          const SizedBox(
-            width: 40.0,
-          ),
-        ],
+        actions: actions,
       ),
       backgroundColor: Colors.grey[100],
       body: Container(
