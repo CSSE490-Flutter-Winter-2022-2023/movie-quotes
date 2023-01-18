@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:movie_quotes/components/movie_quote_row_component.dart';
-import 'package:movie_quotes/managers/movie_quote_collection_manager.dart';
+import 'package:movie_quotes/managers/movie_quotes_collection_manager.dart';
 import 'package:movie_quotes/pages/movie_quote_detail_page.dart';
 
 class MovieQuotesListPage extends StatefulWidget {
@@ -24,7 +24,7 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
 
     movieQuotesSubscription =
         MovieQuotesCollectionManager.instance.startListening(() {
-      // print("There are new quotes!!!!");
+      print("There are new quotes!!!!");
       setState(() {});
     });
 
@@ -71,8 +71,7 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
                       context,
                       MaterialPageRoute(
                         builder: (BuildContext context) {
-                          return MovieQuoteDetailPage(
-                              mq); // In Firebase use a documentId
+                          return MovieQuoteDetailPage(mq.documentId!);
                         },
                       ),
                     );
@@ -154,7 +153,7 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
               ),
               child: const Text('Create'),
               onPressed: () {
-                setState(() async {
+                setState(() {
                   // TODO: Add quotes with firebase!
 
                   // quotes.add(
@@ -163,16 +162,15 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
                   //     movie: movieTextController.text,
                   //   ),
                   // );
-                  final mqId = await MovieQuotesCollectionManager.instance.add(
+                  MovieQuotesCollectionManager.instance.add(
                     quote: quoteTextController.text,
                     movie: movieTextController.text,
                   );
-                  print(mqId);
-                  Navigator.of(context).pop();
 
                   quoteTextController.text = "";
                   movieTextController.text = "";
                 });
+                Navigator.of(context).pop();
               },
             ),
           ],

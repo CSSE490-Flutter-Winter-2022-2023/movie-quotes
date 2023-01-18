@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:movie_quotes/managers/movie_quote_document_manager.dart';
 import 'package:movie_quotes/models/movie_quote.dart';
 
 class MovieQuoteDetailPage extends StatefulWidget {
-  final MovieQuote mq;
-  const MovieQuoteDetailPage(this.mq, {super.key});
+  final String documentId;
+  const MovieQuoteDetailPage(this.documentId, {super.key});
 
   @override
   State<MovieQuoteDetailPage> createState() => _MovieQuoteDetailPageState();
@@ -13,10 +16,24 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
   final quoteTextController = TextEditingController();
   final movieTextController = TextEditingController();
 
+  StreamSubscription? movieQuoteSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    movieQuoteSubscription = MovieQuoteDocumentManager.instance
+        .startListening(widget.documentId, () {
+      print("Quote up!!!!");
+      setState(() {});
+    });
+  }
+
   @override
   void dispose() {
     quoteTextController.dispose();
     movieTextController.dispose();
+    MovieQuoteDocumentManager.instance.stopListening(movieQuoteSubscription);
     super.dispose();
   }
 
@@ -63,12 +80,16 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
           children: [
             LabelledTextDisplay(
               title: "Quote:",
-              content: widget.mq.quote,
+              content:
+                  MovieQuoteDocumentManager.instance.latestMovieQuote?.quote ??
+                      "",
               iconData: Icons.format_quote_outlined,
             ),
             LabelledTextDisplay(
               title: "Movie:",
-              content: widget.mq.movie,
+              content:
+                  MovieQuoteDocumentManager.instance.latestMovieQuote?.movie ??
+                      "",
               iconData: Icons.movie_filter_outlined,
             ),
           ],
@@ -78,8 +99,10 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
   }
 
   Future<void> showEditQuoteDialog(BuildContext context) {
-    quoteTextController.text = widget.mq.quote;
-    movieTextController.text = widget.mq.movie;
+    quoteTextController.text =
+        MovieQuoteDocumentManager.instance.latestMovieQuote?.quote ?? "";
+    movieTextController.text =
+        MovieQuoteDocumentManager.instance.latestMovieQuote?.movie ?? "";
 
     return showDialog<void>(
       context: context,
@@ -131,8 +154,14 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
               child: const Text('Update'),
               onPressed: () {
                 setState(() {
-                  widget.mq.quote = quoteTextController.text;
-                  widget.mq.movie = movieTextController.text;
+                  // widget.mq.quote = quoteTextController.text;
+                  // widget.mq.movie = movieTextController.text;
+
+                  // Done: Update this quote.
+                  MovieQuoteDocumentManager.instance.update(
+                    quote: quoteTextController.text,
+                    movie: movieTextController.text,
+                  );
 
                   // quotes.add(
                   //   MovieQuote(
