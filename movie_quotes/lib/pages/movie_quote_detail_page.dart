@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:movie_quotes/managers/movie_quote_document_manager.dart';
+import 'package:movie_quotes/managers/movie_quotes_collection_manager.dart';
 import 'package:movie_quotes/models/movie_quote.dart';
 
 class MovieQuoteDetailPage extends StatefulWidget {
@@ -52,7 +53,14 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
           ),
           IconButton(
             onPressed: () {
-              print("You clicked Delete!");
+              // print("You clicked Delete!");
+              final tempQuote =
+                  MovieQuoteDocumentManager.instance.latestMovieQuote!.quote;
+              final tempMovie =
+                  MovieQuoteDocumentManager.instance.latestMovieQuote!.movie;
+
+              MovieQuoteDocumentManager.instance.delete();
+
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const Text('Quote Deleted'),
@@ -60,6 +68,10 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
                     label: 'Undo',
                     onPressed: () {
                       print("TODO: Figure out UNDO");
+                      MovieQuotesCollectionManager.instance.add(
+                        quote: tempQuote,
+                        movie: tempMovie,
+                      );
                     },
                   ),
                 ),

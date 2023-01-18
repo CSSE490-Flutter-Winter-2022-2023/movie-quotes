@@ -40,4 +40,6 @@ class MovieQuoteDocumentManager {
       print("Failed to update movie quote: $error");
     });
   }
+
+  Future<void> delete() => _ref.doc(latestMovieQuote!.documentId!).delete();
 }
