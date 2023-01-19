@@ -65,25 +65,26 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
     //   movieRows.add(MovieQuoteRow(movieQuote));
     // }
 
-    final List<MovieQuoteRow> movieRows = quotes
-        .map((mq) => MovieQuoteRow(
-              movieQuote: mq,
-              onTap: () async {
-                print(
-                    "You clicked on the movie quote ${mq.quote} - ${mq.movie}");
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return MovieQuoteDetailPage(
-                          mq); // In Firebase use a documentId
-                    },
-                  ),
-                );
-                setState(() {});
-              },
-            ))
-        .toList();
+    final List<MovieQuoteRow> movieRows =
+        MovieQuotesCollectionManager.instance.latestMovieQuotes
+            .map((mq) => MovieQuoteRow(
+                  movieQuote: mq,
+                  onTap: () async {
+                    print(
+                        "You clicked on the movie quote ${mq.quote} - ${mq.movie}");
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return MovieQuoteDetailPage(
+                              mq); // In Firebase use a documentId
+                        },
+                      ),
+                    );
+                    setState(() {});
+                  },
+                ))
+            .toList();
 
     return Scaffold(
       appBar: AppBar(

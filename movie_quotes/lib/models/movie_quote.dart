@@ -27,4 +27,9 @@ class MovieQuote {
           lastTouched: FirestoreModelUtils.getTimestampField(
               doc, kMovieQuote_lastTouched),
         );
+
+  @override
+  String toString() {
+    return "$quote from the movie $movie";
+  }
 }

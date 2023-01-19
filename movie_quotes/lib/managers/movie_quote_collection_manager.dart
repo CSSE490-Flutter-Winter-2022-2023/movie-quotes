@@ -18,7 +18,10 @@ class MovieQuotesCollectionManager {
         .orderBy(kMovieQuote_lastTouched, descending: true)
         .snapshots()
         .listen((QuerySnapshot querySnapshot) {
-      print(querySnapshot.docs);
+      latestMovieQuotes =
+          querySnapshot.docs.map((doc) => MovieQuote.from(doc)).toList();
+      observer();
+      // print(latestMovieQuotes);
     });
   }
 
