@@ -78,9 +78,9 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
           },
           icon: const Icon(Icons.delete),
         ),
-        const SizedBox(
-          width: 40.0,
-        ),
+        // const SizedBox(
+        //   width: 40.0,
+        // ),
       ];
     }
 
