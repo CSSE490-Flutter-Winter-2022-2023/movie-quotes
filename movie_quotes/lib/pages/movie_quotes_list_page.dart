@@ -55,6 +55,8 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
   void dispose() {
     quoteTextController.dispose();
     movieTextController.dispose();
+    MovieQuotesCollectionManager.instance
+        .stopListening(movieQuotesSubscription);
     super.dispose();
   }
 
