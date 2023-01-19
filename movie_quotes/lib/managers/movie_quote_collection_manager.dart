@@ -29,18 +29,18 @@ class MovieQuotesCollectionManager {
     subscription?.cancel();
   }
 
-  // TODO: Make a stop listening
-
-// Future<void> addUser() {
-//       // Call the user's CollectionReference to add a new user
-//       return users
-//           .add({
-//             'full_name': fullName, // John Doe
-//             'company': company, // Stokes and Sons
-//             'age': age // 42
-//           })
-//           .then((value) => print("User Added"))
-//           .catchError((error) => print("Failed to add user: $error"));
-//     }
-
+  Future<void> add({
+    required String quote,
+    required String movie,
+  }) {
+    return _ref
+        .add({
+          kMovieQuote_quote: quote,
+          kMovieQuote_movie: movie,
+          kMovieQuote_lastTouched: Timestamp.now(),
+        })
+        .then((DocumentReference docRef) =>
+            print("Movie Quote added with id ${docRef.id}"))
+        .catchError((error) => print("Failed to add movie quote: $error"));
+  }
 }

@@ -26,29 +26,8 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
 
     movieQuotesSubscription =
         MovieQuotesCollectionManager.instance.startListening(() {
-      print("There are new quotes!!!!");
       setState(() {});
     });
-
-    // quotes.add(
-    //   MovieQuote(
-    //     quote: "I'll be back",
-    //     movie: "The Terminator",
-    //   ),
-    // );
-    // quotes.add(
-    //   MovieQuote(
-    //     quote: "Everything is Awesome",
-    //     movie: "The Lego Movie",
-    //   ),
-    // );
-    // quotes.add(
-    //   MovieQuote(
-    //     quote:
-    //         "Hello. My name is Inigo Montoya. You killed my father. Prepare to die.",
-    //     movie: "The Princess Bride",
-    //   ),
-    // );
   }
 
   @override
@@ -62,11 +41,6 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final List<MovieQuoteRow> movieRows = [];
-    // for (final movieQuote in quotes) {
-    //   movieRows.add(MovieQuoteRow(movieQuote));
-    // }
-
     final List<MovieQuoteRow> movieRows =
         MovieQuotesCollectionManager.instance.latestMovieQuotes
             .map((mq) => MovieQuoteRow(
@@ -94,11 +68,6 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
       ),
       backgroundColor: Colors.grey[100],
       body: ListView(
-        // children: [
-        //   MovieQuoteRow(quotes[0]),
-        //   MovieQuoteRow(quotes[1]),
-        //   MovieQuoteRow(quotes[2]),
-        // ],
         children: movieRows,
       ),
       floatingActionButton: FloatingActionButton(
@@ -162,14 +131,10 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
               child: const Text('Create'),
               onPressed: () {
                 setState(() {
-                  // TODO: Add quotes with firebase!
-
-                  // quotes.add(
-                  //   MovieQuote(
-                  //     quote: quoteTextController.text,
-                  //     movie: movieTextController.text,
-                  //   ),
-                  // );
+                  MovieQuotesCollectionManager.instance.add(
+                    quote: quoteTextController.text,
+                    movie: movieTextController.text,
+                  );
                   quoteTextController.text = "";
                   movieTextController.text = "";
                 });
