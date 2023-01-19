@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:movie_quotes/components/movie_quote_row_component.dart';
-import 'package:movie_quotes/managers/movie_quote_collection_manager.dart';
+import 'package:movie_quotes/managers/movie_quotes_collection_manager.dart';
 import 'package:movie_quotes/models/movie_quote.dart';
 import 'package:movie_quotes/pages/movie_quote_detail_page.dart';
 
@@ -53,7 +53,7 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
                       MaterialPageRoute(
                         builder: (BuildContext context) {
                           return MovieQuoteDetailPage(
-                              mq); // In Firebase use a documentId
+                              mq.documentId); // In Firebase use a documentId
                         },
                       ),
                     );

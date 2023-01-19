@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:movie_quotes/models/movie_quote.dart';
 
 class MovieQuoteDetailPage extends StatefulWidget {
-  final MovieQuote mq;
-  const MovieQuoteDetailPage(this.mq, {super.key});
+  // final MovieQuote mq;
+  final String documentId;
+  const MovieQuoteDetailPage(this.documentId, {super.key});
 
   @override
   State<MovieQuoteDetailPage> createState() => _MovieQuoteDetailPageState();
