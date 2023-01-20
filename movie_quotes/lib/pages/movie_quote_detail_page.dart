@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:movie_quotes/managers/movie_quote_document_manager.dart';
-import 'package:movie_quotes/models/movie_quote.dart';
+import 'package:movie_quotes/managers/movie_quotes_collection_manager.dart';
 
 class MovieQuoteDetailPage extends StatefulWidget {
-  // final MovieQuote mq;
   final String documentId;
   const MovieQuoteDetailPage(this.documentId, {super.key});
 
@@ -45,30 +44,46 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
       appBar: AppBar(
         title: const Text("Movie Quotes"),
         actions: [
-          IconButton(
-            onPressed: () {
-              print("You clicked Edit!");
-              showEditQuoteDialog(context);
-            },
-            icon: const Icon(Icons.edit),
+          Visibility(
+            visible:
+                MovieQuoteDocumentManager.instance.latestMovieQuote != null,
+            child: IconButton(
+              onPressed: () {
+                showEditQuoteDialog(context);
+              },
+              icon: const Icon(Icons.edit),
+            ),
           ),
-          IconButton(
-            onPressed: () {
-              print("You clicked Delete!");
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Text('Quote Deleted'),
-                  action: SnackBarAction(
-                    label: 'Undo',
-                    onPressed: () {
-                      print("TODO: Figure out UNDO");
-                    },
+          Visibility(
+            visible:
+                MovieQuoteDocumentManager.instance.latestMovieQuote != null,
+            child: IconButton(
+              onPressed: () {
+                final justDeletedQuote =
+                    MovieQuoteDocumentManager.instance.latestMovieQuote!.quote;
+                final justDeletedMovie =
+                    MovieQuoteDocumentManager.instance.latestMovieQuote!.movie;
+
+                MovieQuoteDocumentManager.instance.delete();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Text('Quote Deleted'),
+                    action: SnackBarAction(
+                      label: 'Undo',
+                      onPressed: () {
+                        MovieQuotesCollectionManager.instance.add(
+                          quote: justDeletedQuote,
+                          movie: justDeletedMovie,
+                        );
+                      },
+                    ),
                   ),
-                ),
-              );
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.delete),
+                );
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.delete),
+            ),
           ),
           const SizedBox(
             width: 40.0,
@@ -156,17 +171,10 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
               child: const Text('Update'),
               onPressed: () {
                 setState(() {
-                  // TODO: Figure out update in the Firestore
-
-                  // widget.mq.quote = quoteTextController.text;
-                  // widget.mq.movie = movieTextController.text;
-
-                  // quotes.add(
-                  //   MovieQuote(
-                  //     quote: quoteTextController.text,
-                  //     movie: movieTextController.text,
-                  //   ),
-                  // );
+                  MovieQuoteDocumentManager.instance.update(
+                    quote: quoteTextController.text,
+                    movie: movieTextController.text,
+                  );
                   quoteTextController.text = "";
                   movieTextController.text = "";
                 });
