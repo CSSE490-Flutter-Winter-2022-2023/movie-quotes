@@ -42,7 +42,7 @@ class _LoginFrontPageState extends State<LoginFrontPage> {
               },
             ),
             LoginPageButton(
-              title: "Login",
+              title: "Log in",
               callback: () {
                 Navigator.push(
                   context,
@@ -52,7 +52,17 @@ class _LoginFrontPageState extends State<LoginFrontPage> {
                   ),
                 );
               },
-            )
+            ),
+            const SizedBox(
+              height: 30.0,
+            ),
+            const Text("or log in using a provider..."),
+            LoginPageButton(
+              title: "Google, Facebook, etc",
+              callback: () {
+                print("TODO: Show the Firebase auth UI");
+              },
+            ),
           ],
         ),
       ),
@@ -74,7 +84,7 @@ class LoginPageButton extends StatelessWidget {
     return Container(
       height: 40.0,
       width: 250.0,
-      margin: const EdgeInsets.all(20.0),
+      margin: const EdgeInsets.all(10.0),
       child: ElevatedButton(
         onPressed: callback,
         child: Text(
