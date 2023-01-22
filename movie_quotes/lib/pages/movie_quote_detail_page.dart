@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:movie_quotes/managers/auth_manager.dart';
 import 'package:movie_quotes/managers/movie_quote_document_manager.dart';
 import 'package:movie_quotes/managers/movie_quotes_collection_manager.dart';
 
@@ -40,13 +41,17 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isEditable =
+        (MovieQuoteDocumentManager.instance.latestMovieQuote != null) &&
+            (MovieQuoteDocumentManager.instance.latestMovieQuote?.authorUid ==
+                AuthManager.instance.uid) &&
+            AuthManager.instance.uid.isNotEmpty;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Movie Quotes"),
         actions: [
           Visibility(
-            visible:
-                MovieQuoteDocumentManager.instance.latestMovieQuote != null,
+            visible: isEditable,
             child: IconButton(
               onPressed: () {
                 showEditQuoteDialog(context);
@@ -55,8 +60,7 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
             ),
           ),
           Visibility(
-            visible:
-                MovieQuoteDocumentManager.instance.latestMovieQuote != null,
+            visible: isEditable,
             child: IconButton(
               onPressed: () {
                 final justDeletedQuote =
@@ -85,9 +89,9 @@ class _MovieQuoteDetailPageState extends State<MovieQuoteDetailPage> {
               icon: const Icon(Icons.delete),
             ),
           ),
-          const SizedBox(
-            width: 40.0,
-          ),
+          // const SizedBox(
+          //   width: 40.0,
+          // ),
         ],
       ),
       backgroundColor: Colors.grey[100],

@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:movie_quotes/components/list_page_drawer.dart';
 import 'package:movie_quotes/components/movie_quote_row_component.dart';
 import 'package:movie_quotes/managers/auth_manager.dart';
 import 'package:movie_quotes/managers/movie_quotes_collection_manager.dart';
-import 'package:movie_quotes/models/movie_quote.dart';
 import 'package:movie_quotes/pages/login_front_page.dart';
 import 'package:movie_quotes/pages/movie_quote_detail_page.dart';
 
@@ -47,11 +47,26 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
         setState(() {});
       },
     );
+    showAllQuotes();
+    super.initState();
+  }
+
+  void showAllQuotes() {
+    MovieQuotesCollectionManager.instance
+        .stopListening(movieQuotesSubscription);
     movieQuotesSubscription =
         MovieQuotesCollectionManager.instance.startListening(() {
       setState(() {});
     });
-    super.initState();
+  }
+
+  void showOnlyMyQuotes() {
+    MovieQuotesCollectionManager.instance
+        .stopListening(movieQuotesSubscription);
+    movieQuotesSubscription =
+        MovieQuotesCollectionManager.instance.startListening(() {
+      setState(() {});
+    }, isFiltered: true);
   }
 
   @override
@@ -113,8 +128,15 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
       body: ListView(
         children: movieRows,
       ),
-      drawer:
-          AuthManager.instance.isSignedIn ? const ListPageSideDrawer() : null,
+      drawer: AuthManager.instance.isSignedIn
+          ? ListPageSideDrawer((isFiltered) {
+              if (isFiltered) {
+                showOnlyMyQuotes();
+              } else {
+                showAllQuotes();
+              }
+            })
+          : null,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (AuthManager.instance.isSignedIn) {
@@ -235,61 +257,6 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
           ],
         );
       },
-    );
-  }
-}
-
-class ListPageSideDrawer extends StatelessWidget {
-  const ListPageSideDrawer({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            child: const Text(
-              "Movie Quotes",
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 28.0,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          ListTile(
-            title: const Text("Show only my quotes"),
-            leading: const Icon(Icons.person),
-            onTap: () {
-              print("TODO: Show only my quotes.");
-            },
-          ),
-          ListTile(
-            title: const Text("Show all quotes"),
-            leading: const Icon(Icons.people),
-            onTap: () {
-              print("TODO: Show all quotes again.");
-              Navigator.pop(context);
-            },
-          ),
-          const Spacer(),
-          // const Divider(
-          //   thickness: 2.0,
-          // ),
-          ListTile(
-            title: const Text("Logout"),
-            leading: const Icon(Icons.logout),
-            onTap: () {
-              Navigator.of(context).pop();
-              AuthManager.instance.signOut();
-            },
-          ),
-        ],
-      ),
     );
   }
 }
