@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:movie_quotes/components/movie_quote_row_component.dart';
+import 'package:movie_quotes/managers/auth_manager.dart';
 import 'package:movie_quotes/managers/movie_quotes_collection_manager.dart';
 import 'package:movie_quotes/models/movie_quote.dart';
+import 'package:movie_quotes/pages/login_front_page.dart';
 import 'package:movie_quotes/pages/movie_quote_detail_page.dart';
 
 class MovieQuotesListPage extends StatefulWidget {
@@ -14,20 +16,42 @@ class MovieQuotesListPage extends StatefulWidget {
 }
 
 class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
-  final quotes = <MovieQuote>[]; // Later we will remove this and use Firestore
   final quoteTextController = TextEditingController();
   final movieTextController = TextEditingController();
 
   StreamSubscription? movieQuotesSubscription;
+  UniqueKey? _logoutSubscription;
+  UniqueKey? _loginSubscription;
 
   @override
   void initState() {
-    super.initState();
-
+    _loginSubscription = AuthManager.instance.addLoginObserver(
+      () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 1),
+            content: Text("Signed in as ${AuthManager.instance.email}"),
+          ),
+        );
+        setState(() {});
+      },
+    );
+    _logoutSubscription = AuthManager.instance.addLogoutObserver(
+      () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 1),
+            content: Text("Signed out"),
+          ),
+        );
+        setState(() {});
+      },
+    );
     movieQuotesSubscription =
         MovieQuotesCollectionManager.instance.startListening(() {
       setState(() {});
     });
+    super.initState();
   }
 
   @override
@@ -36,6 +60,8 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
     movieTextController.dispose();
     MovieQuotesCollectionManager.instance
         .stopListening(movieQuotesSubscription);
+    AuthManager.instance.removeLoginObserver(_loginSubscription);
+    AuthManager.instance.removeLogoutObserver(_logoutSubscription);
     super.dispose();
   }
 
@@ -65,14 +91,37 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Movie Quotes"),
+        actions: !AuthManager.instance.isSignedIn
+            ? [
+                IconButton(
+                  tooltip: "Login",
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((context) => const LoginFrontPage()),
+                      ),
+                    );
+                    setState(() {});
+                  },
+                  icon: const Icon(Icons.login),
+                ),
+              ]
+            : null,
       ),
       backgroundColor: Colors.grey[100],
       body: ListView(
         children: movieRows,
       ),
+      drawer:
+          AuthManager.instance.isSignedIn ? const ListPageSideDrawer() : null,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showCreateQuoteDialog(context);
+          if (AuthManager.instance.isSignedIn) {
+            showCreateQuoteDialog(context);
+          } else {
+            showLoginRequestDialog(context);
+          }
         },
         tooltip: 'Create',
         child: const Icon(Icons.add),
@@ -144,6 +193,103 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
           ],
         );
       },
+    );
+  }
+
+  Future<void> showLoginRequestDialog(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Login Required'),
+          content: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4.0),
+            child: Text(
+                "You must be signed in to post.  Would you like to sign in now?"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Go sign in'),
+              onPressed: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((context) => const LoginFrontPage()),
+                  ),
+                );
+                setState(() {});
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class ListPageSideDrawer extends StatelessWidget {
+  const ListPageSideDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+            ),
+            child: const Text(
+              "Movie Quotes",
+              style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 28.0,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          ListTile(
+            title: const Text("Show only my quotes"),
+            leading: const Icon(Icons.person),
+            onTap: () {
+              print("TODO: Show only my quotes.");
+            },
+          ),
+          ListTile(
+            title: const Text("Show all quotes"),
+            leading: const Icon(Icons.people),
+            onTap: () {
+              print("TODO: Show all quotes again.");
+              Navigator.pop(context);
+            },
+          ),
+          const Spacer(),
+          // const Divider(
+          //   thickness: 2.0,
+          // ),
+          ListTile(
+            title: const Text("Logout"),
+            leading: const Icon(Icons.logout),
+            onTap: () {
+              Navigator.of(context).pop();
+              AuthManager.instance.signOut();
+            },
+          ),
+        ],
+      ),
     );
   }
 }
