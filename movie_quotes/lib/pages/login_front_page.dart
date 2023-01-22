@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:movie_quotes/managers/auth_manager.dart';
+import 'package:movie_quotes/pages/movie_quotes_list_page.dart';
 
 import 'email_password_auth_page.dart';
 

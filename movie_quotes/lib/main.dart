@@ -18,11 +18,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Movie Quotes',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: const MovieQuotesListPage(),
-      home: const LoginFrontPage(),
+      home: const MovieQuotesListPage(),
+      // home: const LoginFrontPage(),
     );
   }
 }
