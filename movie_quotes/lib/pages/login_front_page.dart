@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:movie_quotes/pages/email_password_auth_page.dart';
 
 class LoginFrontPage extends StatefulWidget {
   const LoginFrontPage({super.key});
@@ -34,6 +35,14 @@ class _LoginFrontPageState extends State<LoginFrontPage> {
               title: "Log in",
               callback: () {
                 print("TODO: Go to the next page to log in");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return const EmailPasswordAuthPage(isNewUser: false);
+                    },
+                  ),
+                );
               },
             ),
             Row(
@@ -43,6 +52,14 @@ class _LoginFrontPageState extends State<LoginFrontPage> {
                 TextButton(
                   onPressed: () {
                     print("TODO: Go to the next page to create an account in");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return const EmailPasswordAuthPage(isNewUser: true);
+                        },
+                      ),
+                    );
                   },
                   child: const Text("Sign Up Here"),
                 ),
