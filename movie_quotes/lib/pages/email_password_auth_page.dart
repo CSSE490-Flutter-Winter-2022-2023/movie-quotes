@@ -5,7 +5,10 @@ import 'package:movie_quotes/pages/movie_quotes_list_page.dart';
 
 class EmailPasswordAuthPage extends StatefulWidget {
   final bool isNewUser;
-  const EmailPasswordAuthPage({required this.isNewUser, super.key});
+  const EmailPasswordAuthPage({
+    required this.isNewUser,
+    super.key,
+  });
 
   @override
   State<EmailPasswordAuthPage> createState() => _EmailPasswordAuthPageState();

@@ -41,6 +41,6 @@ class MovieQuoteDocumentManager {
   }
 
   Future<void> delete() {
-    return _ref.doc(latestMovieQuote?.documentId!).delete();
+    return _ref.doc(latestMovieQuote?.documentId).delete();
   }
 }
