@@ -1,8 +1,5 @@
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:movie_quotes/managers/auth_manager.dart';
-import 'package:movie_quotes/pages/movie_quotes_list_page.dart';
 
 import 'email_password_auth_page.dart';
 
@@ -14,6 +11,8 @@ class LoginFrontPage extends StatefulWidget {
 }
 
 class _LoginFrontPageState extends State<LoginFrontPage> {
+  var providers = [EmailAuthProvider()];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +62,22 @@ class _LoginFrontPageState extends State<LoginFrontPage> {
               title: "Google, Facebook, etc",
               callback: () {
                 print("TODO: Show the Firebase auth UI");
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((context) => SignInScreen(
+                          providers: providers,
+                          actions: [
+                            AuthStateChangeAction<SignedIn>((context, state) {
+                              print("Sign in change occurred.");
+                              Navigator.of(context)
+                                  .popUntil((route) => route.isFirst);
+                            }),
+                          ],
+                        )),
+                  ),
+                );
               },
             ),
           ],
