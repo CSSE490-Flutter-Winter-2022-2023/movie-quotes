@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'email_password_auth_page.dart';
 
@@ -11,7 +14,12 @@ class LoginFrontPage extends StatefulWidget {
 }
 
 class _LoginFrontPageState extends State<LoginFrontPage> {
-  var providers = [EmailAuthProvider()];
+  var providers = <AuthProvider<AuthListener, AuthCredential>>[
+    // EmailAuthProvider(),
+    GoogleProvider(
+        clientId:
+            "241570666356-6iov3qjio5gqetunhk1ma5ilhqbf8vd8.apps.googleusercontent.com"),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -67,13 +75,17 @@ class _LoginFrontPageState extends State<LoginFrontPage> {
                   context,
                   MaterialPageRoute(
                     builder: ((context) => SignInScreen(
-                          providers: providers,
+                          providers: FirebaseUIAuth.providersFor(
+                            FirebaseAuth.instance.app,
+                          ),
                           actions: [
-                            AuthStateChangeAction<SignedIn>((context, state) {
-                              print("Sign in change occurred.");
-                              Navigator.of(context)
-                                  .popUntil((route) => route.isFirst);
-                            }),
+                            AuthStateChangeAction(
+                              ((context, state) {
+                                print("Catch all auth state actions");
+                                Navigator.of(context)
+                                    .popUntil((route) => route.isFirst);
+                              }),
+                            ),
                           ],
                         )),
                   ),
