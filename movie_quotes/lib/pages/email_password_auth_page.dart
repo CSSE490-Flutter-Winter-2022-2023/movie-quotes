@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -16,6 +17,7 @@ class EmailPasswordAuthPage extends StatefulWidget {
 class _EmailPasswordAuthPageState extends State<EmailPasswordAuthPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -32,31 +34,44 @@ class _EmailPasswordAuthPageState extends State<EmailPasswordAuthPage> {
               ? "Create a New User"
               : "Log in an Existing User"),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
+        body: Form(
+          key: _formKey,
           child: Column(
             children: [
               const SizedBox(
                 height: 250.0,
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(20.0),
                 child: TextFormField(
                   controller: emailTextController,
+                  validator: (String? value) {
+                    if (value == null || !EmailValidator.validate(value)) {
+                      return "Please enter a valid email";
+                    }
+                    return null;
+                  },
                   decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Email',
-                  ),
+                      border: OutlineInputBorder(),
+                      labelText: "Email",
+                      hintText: "Must be a valid email format"),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(20.0),
                 child: TextFormField(
                   controller: passwordTextController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
-                  ),
+                  obscureText: true,
+                  validator: (String? value) {
+                    if (value == null || value.length < 6) {
+                      return "Passwords must be at least 6 characters";
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Password',
+                      hintText: "Passwords must be at least 6 characters"),
                 ),
               ),
               const SizedBox(
@@ -71,17 +86,21 @@ class _EmailPasswordAuthPageState extends State<EmailPasswordAuthPage> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    print(
-                        "Email: ${emailTextController.text}  Password: ${passwordTextController.text}");
-                    if (widget.isNewUser) {
-                      print("TODO: Create a new user!");
+                    if (_formKey.currentState!.validate()) {
+                      print(
+                          "Email: ${emailTextController.text}  Password: ${passwordTextController.text}");
+                      if (widget.isNewUser) {
+                        print("TODO: Create a new user!");
+                      } else {
+                        print("TODO: Log in an existing user");
+                      }
                     } else {
-                      print("TODO: Log in an existing user");
+                      print("This form isn't valid, do nothing");
                     }
                   },
                   child: Text(
                     widget.isNewUser ? "Create Account" : "Log In",
-                    style: TextStyle(color: Colors.white, fontSize: 18.0),
+                    style: const TextStyle(color: Colors.white, fontSize: 18.0),
                   ),
                 ),
               ),
