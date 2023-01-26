@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:movie_quotes/managers/auth_manager.dart';
 
 class EmailPasswordAuthPage extends StatefulWidget {
   final bool isNewUser;
@@ -18,6 +19,13 @@ class _EmailPasswordAuthPageState extends State<EmailPasswordAuthPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    // TODO: Remove this quick hack!
+    AuthManager.instance.startListening();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -52,6 +60,7 @@ class _EmailPasswordAuthPageState extends State<EmailPasswordAuthPage> {
                     return null;
                   },
                   decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.email),
                       border: OutlineInputBorder(),
                       labelText: "Email",
                       hintText: "Must be a valid email format"),
@@ -69,6 +78,7 @@ class _EmailPasswordAuthPageState extends State<EmailPasswordAuthPage> {
                     return null;
                   },
                   decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.abc),
                       border: OutlineInputBorder(),
                       labelText: 'Password',
                       hintText: "Passwords must be at least 6 characters"),
@@ -90,7 +100,12 @@ class _EmailPasswordAuthPageState extends State<EmailPasswordAuthPage> {
                       print(
                           "Email: ${emailTextController.text}  Password: ${passwordTextController.text}");
                       if (widget.isNewUser) {
-                        print("TODO: Create a new user!");
+                        print("Creating a new user!");
+                        AuthManager.instance.createNewUserEmailPassword(
+                          context: context,
+                          email: emailTextController.text,
+                          password: passwordTextController.text,
+                        );
                       } else {
                         print("TODO: Log in an existing user");
                       }
