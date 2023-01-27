@@ -68,6 +68,10 @@ class AuthManager {
     _logoutObservers.remove(key);
   }
 
+  void signOut() {
+    FirebaseAuth.instance.signOut();
+  }
+
   String get email => _user?.email ?? "";
   String get uid => _user?.uid ?? "";
   bool get isSignedIn => _user != null;
@@ -113,7 +117,28 @@ class AuthManager {
   }
 
   void logInExistingUserEmailPassword({
+    required BuildContext context,
     required String email,
     required String password,
-  }) {}
+  }) async {
+    try {
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      print("AuthManager: Logged in existing User ${credential.user?.email}");
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "user-not-found") {
+        // print('No user found for that email.');
+        _showAuthSnackbar(
+            context: context,
+            authErrorMessage: "No user found for that email.");
+      } else if (e.code == "wrong-password") {
+        // print('Wrong password provided for that user.');
+        _showAuthSnackbar(
+            context: context,
+            authErrorMessage: "Wrong password provided for that user.");
+      }
+    } catch (e) {
+      _showAuthSnackbar(context: context, authErrorMessage: e.toString());
+    }
+  }
 }
