@@ -27,7 +27,7 @@ class _EmailPasswordAuthPageState extends State<EmailPasswordAuthPage> {
     _loginObserverKey = AuthManager.instance.addLoginObserver(() {
       print("EmailPassword page: Log in observed.  TODO: pop this page!");
 
-      // Start class here on Monday Jan 30, 2022!
+      Navigator.of(context).popUntil((route) => route.isFirst);
     });
     super.initState();
   }
