@@ -74,10 +74,11 @@ class AuthManager {
 
   String get email => _user?.email ?? "";
   String get uid => _user?.uid ?? "";
-  // bool get isSignedIn => _user != null;
+  bool get isSignedIn => _user != null;
 
-  // bool get isSignedIn => true;
-  bool get isSignedIn => false;
+// Done for UI testing...
+  // bool get isSignedIn => true; // Signed in UI testing
+  // bool get isSignedIn => false;  // NOT signed in
 
   // --- Specific auth methods...
 

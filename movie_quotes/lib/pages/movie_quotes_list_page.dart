@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:movie_quotes/components/list_page_side_drawer.dart';
 import 'package:movie_quotes/components/movie_quote_row_component.dart';
 import 'package:movie_quotes/managers/auth_manager.dart';
 import 'package:movie_quotes/managers/movie_quotes_collection_manager.dart';
@@ -80,18 +81,9 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Movie Quotes"),
+        title: const Text("Movie Quotes"),
         actions: AuthManager.instance.isSignedIn
-            ? [
-                // TODO: Remove this whole section once a drawer!
-                IconButton(
-                  onPressed: () {
-                    AuthManager.instance.signOut();
-                  },
-                  tooltip: "Log out",
-                  icon: const Icon(Icons.logout),
-                ),
-              ]
+            ? null
             : [
                 IconButton(
                   onPressed: () {
@@ -110,6 +102,7 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
       body: ListView(
         children: movieRows,
       ),
+      drawer: AuthManager.instance.isSignedIn ? ListPageSideDrawer() : null,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (AuthManager.instance.isSignedIn) {
