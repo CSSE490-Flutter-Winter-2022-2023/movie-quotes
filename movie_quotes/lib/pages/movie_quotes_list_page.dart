@@ -102,7 +102,16 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
       body: ListView(
         children: movieRows,
       ),
-      drawer: AuthManager.instance.isSignedIn ? ListPageSideDrawer() : null,
+      drawer: AuthManager.instance.isSignedIn
+          ? ListPageSideDrawer(
+              showAllCallback: () {
+                print("MovieQuoteListPage: Callback to Show all quotes");
+              },
+              showOnlyMineCallback: () {
+                print("MovieQuoteListPage: Callback to Show only my quotes");
+              },
+            )
+          : null,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (AuthManager.instance.isSignedIn) {
