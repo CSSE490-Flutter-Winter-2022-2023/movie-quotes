@@ -16,6 +16,7 @@ class MovieQuotesCollectionManager {
 
   StreamSubscription startListening(Function() observer) {
     return _ref
+        .where(kMovieQuote_authorUid, isEqualTo: AuthManager.instance.uid)
         .orderBy(kMovieQuote_lastTouched, descending: true)
         .snapshots()
         .listen((QuerySnapshot querySnapshot) {

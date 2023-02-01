@@ -35,8 +35,6 @@ class ListPageSideDrawer extends StatelessWidget {
             title: const Text("Show only my quotes"),
             leading: const Icon(Icons.person),
             onTap: () {
-              print(
-                  "ListPageSideDrawer: Call the callback saying Show only my quotes");
               showOnlyMineCallback();
               Navigator.of(context).pop();
             },
@@ -45,8 +43,6 @@ class ListPageSideDrawer extends StatelessWidget {
             title: const Text("Show all quotes"),
             leading: const Icon(Icons.people),
             onTap: () {
-              print(
-                  "ListPageSideDrawer: Call the callback saying Show all quotes");
               showAllCallback();
               Navigator.of(context).pop();
             },
