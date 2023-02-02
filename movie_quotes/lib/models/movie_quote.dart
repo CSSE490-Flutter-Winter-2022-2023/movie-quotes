@@ -33,6 +33,15 @@ class MovieQuote {
           quote: FirestoreModelUtils.getStringField(doc, kMovieQuote_quote),
         );
 
+  Map<String, Object?> toMap() {
+    return {
+      kMovieQuote_authorUid: authorUid,
+      kMovieQuote_lastTouched: lastTouched,
+      kMovieQuote_movie: movie,
+      kMovieQuote_quote: quote,
+    };
+  }
+
   @override
   String toString() {
     return "$quote from the movie $movie";

@@ -73,7 +73,12 @@ class AuthManager {
   }
 
   String get email => _user?.email ?? "";
-  String get uid => _user?.uid ?? "";
+  // String get uid => _user?.uid ?? "";
+  String get uid {
+    print("Called auth manager ${this._user}");
+    return _user?.uid ?? "";
+  }
+
   bool get isSignedIn => _user != null;
 
 // Done for UI testing...

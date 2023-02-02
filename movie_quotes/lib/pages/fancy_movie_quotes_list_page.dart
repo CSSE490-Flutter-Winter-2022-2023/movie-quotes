@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_quotes/components/list_page_side_drawer.dart';
 import 'package:movie_quotes/components/movie_quote_row_component.dart';
@@ -10,19 +11,21 @@ import 'package:movie_quotes/pages/movie_quote_detail_page.dart';
 
 import 'login_front_page.dart';
 
-class MovieQuotesListPage extends StatefulWidget {
-  const MovieQuotesListPage({super.key});
+class FancyMovieQuotesListPage extends StatefulWidget {
+  const FancyMovieQuotesListPage({super.key});
 
   @override
-  State<MovieQuotesListPage> createState() => _MovieQuotesListPageState();
+  State<FancyMovieQuotesListPage> createState() =>
+      _FancyMovieQuotesListPageState();
 }
 
-class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
-  final quotes = <MovieQuote>[]; // Later we will remove this and use Firestore
+class _FancyMovieQuotesListPageState extends State<FancyMovieQuotesListPage> {
+  // final quotes = <MovieQuote>[];
   final quoteTextController = TextEditingController();
   final movieTextController = TextEditingController();
+  bool _isShowingAllQuotes = true;
 
-  StreamSubscription? movieQuotesSubscription;
+  // StreamSubscription? movieQuotesSubscription;
 
   UniqueKey? _loginObserverKey;
   UniqueKey? _logoutObserverKey;
@@ -39,8 +42,8 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
   void dispose() {
     quoteTextController.dispose();
     movieTextController.dispose();
-    MovieQuotesCollectionManager.instance
-        .stopListening(movieQuotesSubscription);
+    // MovieQuotesCollectionManager.instance
+    //     .stopListening(movieQuotesSubscription);
     AuthManager.instance.removeObserver(_loginObserverKey);
     AuthManager.instance.removeObserver(_logoutObserverKey);
     super.dispose();
@@ -48,24 +51,24 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<MovieQuoteRow> movieRows =
-        MovieQuotesCollectionManager.instance.latestMovieQuotes
-            .map((mq) => MovieQuoteRow(
-                  movieQuote: mq,
-                  onTap: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) {
-                          return MovieQuoteDetailPage(
-                              mq.documentId!); // In Firebase use a documentId
-                        },
-                      ),
-                    );
-                    setState(() {});
-                  },
-                ))
-            .toList();
+    // final List<MovieQuoteRow> movieRows =
+    //     MovieQuotesCollectionManager.instance.latestMovieQuotes
+    //         .map((mq) => MovieQuoteRow(
+    //               movieQuote: mq,
+    //               onTap: () async {
+    //                 await Navigator.push(
+    //                   context,
+    //                   MaterialPageRoute(
+    //                     builder: (BuildContext context) {
+    //                       return MovieQuoteDetailPage(
+    //                           mq.documentId!); // In Firebase use a documentId
+    //                     },
+    //                   ),
+    //                 );
+    //                 setState(() {});
+    //               },
+    //             ))
+    //         .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -87,8 +90,33 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
               ],
       ),
       backgroundColor: Colors.grey[100],
-      body: ListView(
-        children: movieRows,
+      body:
+          // ListView(
+          //   children: movieRows,
+          // ),
+          FirestoreListView<MovieQuote>(
+        query: _isShowingAllQuotes
+            ? MovieQuotesCollectionManager.instance.allMovieQuotesQuery
+            : MovieQuotesCollectionManager.instance.mineOnlyMovieQuotesQuery,
+        itemBuilder: (context, querySnapshot) {
+          // Note, the .data IS a MovieQuote due to the query converter.
+          final MovieQuote mq = querySnapshot.data();
+          // return Text(mq.quote);
+          return MovieQuoteRow(
+            movieQuote: mq,
+            onTap: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return MovieQuoteDetailPage(mq.documentId!);
+                  },
+                ),
+              );
+              setState(() {});
+            },
+          );
+        },
       ),
       drawer: AuthManager.instance.isSignedIn
           ? ListPageSideDrawer(
@@ -111,21 +139,27 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
   }
 
   void showAllQuotes() {
-    MovieQuotesCollectionManager.instance
-        .stopListening(movieQuotesSubscription);
-    movieQuotesSubscription =
-        MovieQuotesCollectionManager.instance.startListening(() {
-      setState(() {});
+    setState(() {
+      _isShowingAllQuotes = true;
     });
+    // MovieQuotesCollectionManager.instance
+    //     .stopListening(movieQuotesSubscription);
+    // movieQuotesSubscription =
+    //     MovieQuotesCollectionManager.instance.startListening(() {
+    //   setState(() {});
+    // });
   }
 
   void showOnlyMyQuotes() {
-    MovieQuotesCollectionManager.instance
-        .stopListening(movieQuotesSubscription);
-    movieQuotesSubscription =
-        MovieQuotesCollectionManager.instance.startListening(() {
-      setState(() {});
-    }, isFiltered: true);
+    setState(() {
+      _isShowingAllQuotes = false;
+    });
+    // MovieQuotesCollectionManager.instance
+    //     .stopListening(movieQuotesSubscription);
+    // movieQuotesSubscription =
+    //     MovieQuotesCollectionManager.instance.startListening(() {
+    //   setState(() {});
+    // }, isFiltered: true);
   }
 
   Future<void> showCreateQuoteDialog(BuildContext context) {

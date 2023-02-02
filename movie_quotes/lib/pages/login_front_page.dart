@@ -3,6 +3,9 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:movie_quotes/pages/email_password_auth_page.dart';
 
+import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+
 class LoginFrontPage extends StatefulWidget {
   const LoginFrontPage({super.key});
 
@@ -34,7 +37,6 @@ class _LoginFrontPageState extends State<LoginFrontPage> {
             LoginButton(
               title: "Log in",
               callback: () {
-                print("TODO: Go to the next page to log in");
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -51,7 +53,6 @@ class _LoginFrontPageState extends State<LoginFrontPage> {
                 const Text("Don't have an account?"),
                 TextButton(
                   onPressed: () {
-                    print("TODO: Go to the next page to create an account in");
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -71,8 +72,24 @@ class _LoginFrontPageState extends State<LoginFrontPage> {
             LoginButton(
                 title: "Or sign in with Google",
                 callback: () {
-                  print(
-                      "TODO: Log in using Firebase Auth and an OAuth provider (like Google)");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((context) => SignInScreen(
+                            providers: FirebaseUIAuth.providersFor(
+                              FirebaseAuth.instance.app,
+                            ),
+                            actions: [
+                              AuthStateChangeAction(
+                                ((context, state) {
+                                  Navigator.of(context)
+                                      .popUntil((route) => route.isFirst);
+                                }),
+                              ),
+                            ],
+                          )),
+                    ),
+                  );
                 })
           ],
         ),

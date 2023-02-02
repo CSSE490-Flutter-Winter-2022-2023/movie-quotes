@@ -14,9 +14,19 @@ class MovieQuotesCollectionManager {
   MovieQuotesCollectionManager._privateConstructor()
       : _ref = FirebaseFirestore.instance.collection(kMovieQuoteCollectionPath);
 
-  StreamSubscription startListening(Function() observer) {
-    return _ref
-        .where(kMovieQuote_authorUid, isEqualTo: AuthManager.instance.uid)
+  StreamSubscription startListening(Function() observer,
+      {bool isFiltered = false}) {
+    Query query = _ref;
+    if (isFiltered) {
+      query = query.where(kMovieQuote_authorUid,
+          isEqualTo: AuthManager.instance.uid);
+    }
+    print(
+        "manager AuthManager.instance.isSignedIn = ${AuthManager.instance.isSignedIn}");
+    print("manager AuthManager.instance.email = ${AuthManager.instance.email}");
+    print("manager AuthManager.instance.uid = ${AuthManager.instance.uid}");
+    return query
+        // .where(kMovieQuote_authorUid, isEqualTo: AuthManager.instance.uid)
         .orderBy(kMovieQuote_lastTouched, descending: true)
         .snapshots()
         .listen((QuerySnapshot querySnapshot) {
@@ -46,4 +56,19 @@ class MovieQuotesCollectionManager {
             print("Movie Quote added with id ${docRef.id}"))
         .catchError((error) => print("Failed to add movie quote: $error"));
   }
+
+  // ------------ Firebase UI Firestore
+
+  Query<MovieQuote> get allMovieQuotesQuery =>
+      _ref.orderBy(kMovieQuote_lastTouched).withConverter<MovieQuote>(
+        fromFirestore: (snapshot, options) {
+          return MovieQuote.from(snapshot);
+        },
+        toFirestore: (mq, options) {
+          return mq.toMap();
+        },
+      );
+
+  Query<MovieQuote> get mineOnlyMovieQuotesQuery => allMovieQuotesQuery
+      .where(kMovieQuote_authorUid, isEqualTo: AuthManager.instance.uid);
 }
