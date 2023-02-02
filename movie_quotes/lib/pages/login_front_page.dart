@@ -1,3 +1,4 @@
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -34,7 +35,6 @@ class _LoginFrontPageState extends State<LoginFrontPage> {
             LoginButton(
               title: "Log in",
               callback: () {
-                print("TODO: Go to the next page to log in");
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -73,6 +73,23 @@ class _LoginFrontPageState extends State<LoginFrontPage> {
                 callback: () {
                   print(
                       "TODO: Log in using Firebase Auth and an OAuth provider (like Google)");
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return SignInScreen(
+                          // providers: [],
+                          actions: [
+                            AuthStateChangeAction((context, state) {
+                              Navigator.of(context)
+                                  .popUntil((route) => route.isFirst);
+                            }),
+                          ],
+                        );
+                      },
+                    ),
+                  );
                 })
           ],
         ),
