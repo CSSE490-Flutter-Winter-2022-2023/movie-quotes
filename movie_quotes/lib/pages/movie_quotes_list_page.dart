@@ -31,12 +31,12 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
   void initState() {
     super.initState();
 
-    movieQuotesSubscription =
-        MovieQuotesCollectionManager.instance.startListening(() {
-      setState(() {});
-    });
-
     _loginObserverKey = AuthManager.instance.addLoginObserver(() {
+      movieQuotesSubscription =
+          MovieQuotesCollectionManager.instance.startListening(() {
+        setState(() {});
+      });
+
       setState(() {});
     });
 
