@@ -31,18 +31,37 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
   void initState() {
     super.initState();
 
-    _loginObserverKey = AuthManager.instance.addLoginObserver(() {
-      movieQuotesSubscription =
-          MovieQuotesCollectionManager.instance.startListening(() {
-        setState(() {});
-      });
+    _showAllQuotes();
 
+    _loginObserverKey = AuthManager.instance.addLoginObserver(() {
       setState(() {});
     });
 
     _logoutObserverKey = AuthManager.instance.addLogoutObserver(() {
+      _showAllQuotes();
       setState(() {});
     });
+  }
+
+  void _showAllQuotes() {
+    MovieQuotesCollectionManager.instance
+        .stopListening(movieQuotesSubscription); // Just in case.
+    movieQuotesSubscription =
+        MovieQuotesCollectionManager.instance.startListening(() {
+      setState(() {});
+    });
+  }
+
+  void _showOnlyMyQuotes() {
+    MovieQuotesCollectionManager.instance
+        .stopListening(movieQuotesSubscription); // Just in case.
+    movieQuotesSubscription =
+        MovieQuotesCollectionManager.instance.startListening(
+      () {
+        setState(() {});
+      },
+      isFilteredForMine: true,
+    );
   }
 
   @override
@@ -106,9 +125,11 @@ class _MovieQuotesListPageState extends State<MovieQuotesListPage> {
           ? ListPageSideDrawer(
               showAllCallback: () {
                 print("MovieQuoteListPage: Callback to Show all quotes");
+                _showAllQuotes();
               },
               showOnlyMineCallback: () {
                 print("MovieQuoteListPage: Callback to Show only my quotes");
+                _showOnlyMyQuotes();
               },
             )
           : null,

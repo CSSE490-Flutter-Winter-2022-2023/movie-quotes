@@ -14,12 +14,14 @@ class MovieQuotesCollectionManager {
   MovieQuotesCollectionManager._privateConstructor()
       : _ref = FirebaseFirestore.instance.collection(kMovieQuoteCollectionPath);
 
-  StreamSubscription startListening(Function() observer) {
-    return _ref
-        .where(kMovieQuote_authorUid, isEqualTo: AuthManager.instance.uid)
-        .orderBy(kMovieQuote_lastTouched, descending: true)
-        .snapshots()
-        .listen((QuerySnapshot querySnapshot) {
+  StreamSubscription startListening(Function() observer,
+      {bool isFilteredForMine = false}) {
+    Query query = _ref.orderBy(kMovieQuote_lastTouched, descending: true);
+    if (isFilteredForMine) {
+      query = query.where(kMovieQuote_authorUid,
+          isEqualTo: AuthManager.instance.uid);
+    }
+    return query.snapshots().listen((QuerySnapshot querySnapshot) {
       latestMovieQuotes =
           querySnapshot.docs.map((doc) => MovieQuote.from(doc)).toList();
       observer();
