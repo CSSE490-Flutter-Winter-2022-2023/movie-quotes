@@ -48,4 +48,16 @@ class MovieQuotesCollectionManager {
             print("Movie Quote added with id ${docRef.id}"))
         .catchError((error) => print("Failed to add movie quote: $error"));
   }
+
+  // Firebase UI Firestore stuff
+
+  Query<MovieQuote> get allMovieQuotesQuery => _ref
+      .orderBy(kMovieQuote_lastTouched, descending: true)
+      .withConverter<MovieQuote>(
+        fromFirestore: (snapshot, _) => MovieQuote.from(snapshot),
+        toFirestore: (mq, _) => mq.toMap(),
+      );
+
+  Query<MovieQuote> get mineOnlyMovieQuotesQuery => allMovieQuotesQuery
+      .where(kMovieQuote_authorUid, isEqualTo: AuthManager.instance.uid);
 }
